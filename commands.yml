@@ -1,0 +1,37 @@
+---
+- name: commands
+  hosts: win1.example.com
+  tasks:
+    - name: query installed prodcuts
+      win_shell: >
+        Get-WmiObject -Class Win32_Product |
+        Select-Object -ExpandProperty Name
+      args:
+        chdir: c:\windows
+      register: queryresult
+      changed_when: false
+
+    - name: uninstall if needed
+      win_shell: |
+        $app = Get-WmiObject -Class Win32_Product | Where-Object { 
+           $_.Name -eq "7-Zip 19.00 (x64 edition)" 
+        }
+        $app.Uninstall()
+      when: '"7-Zip 19.00 (x64 edition)" in queryresult.stdout_lines'
+
+    - name: schedule a task
+      win_scheduled_task:
+        name: mytask
+        actions:
+          - path: ping.exe
+            arguments: windc.example.com
+          - path: ping.example
+            arguments: win2.example.com
+        triggers:
+          - type: boot
+          - type: daily
+            start_boundary: '2020-01-01T15:00:00'
+          - type: daily
+            start_boundary: '2020-01-01T09:00:00'
+        username: SYSTEM
+        state: present

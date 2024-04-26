@@ -1,0 +1,14 @@
+---
+- name: use a role
+  hosts: webservers
+  tasks:
+    - name: first task
+      win_ping:
+
+    - name: run a role
+      import_role:
+        name: security
+      
+    - name: task afterward
+      win_ping:
+  

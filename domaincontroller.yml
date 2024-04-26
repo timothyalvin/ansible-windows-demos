@@ -1,0 +1,17 @@
+---
+- name: dc
+  hosts: win2.example.com
+  gather_facts: false
+  tasks:
+    - name: promote
+      win_domain_controller:
+        dns_domain_name: example.com
+        state: domain_controller
+        domain_admin_user: Administrator@example.com
+        domain_admin_password: RedHat123@!
+        safe_mode_password: RedHat123@!
+      register: promoteresult
+
+    - name: reboot if needed
+      win_reboot:
+      when: promoteresult.reboot_required

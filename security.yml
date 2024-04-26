@@ -1,0 +1,16 @@
+---
+- name: loops demo
+  hosts: Windows
+  gather_facts: no
+  tasks:
+    - name: stop services
+      win_service:
+        name: '{{ item }}'
+        state: stopped
+        start_mode: disabled
+      loop: '{{ banned_services }}'
+      ignore_errors: true
+
+    - name: subsequent task
+      debug:
+        msg: we continued to here

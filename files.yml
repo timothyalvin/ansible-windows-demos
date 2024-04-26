@@ -1,0 +1,47 @@
+---
+- name: files demo
+  hosts: win1.example.com
+  tasks:
+    - name: ensure a directory exists
+      win_file:
+        path: c:\mypath\is\this
+        state: directory
+
+    - name: copy something there
+      win_copy:
+        src: README.md
+        dest: c:\mypath\myfile.txt
+
+    - name: copy something there
+      win_copy:
+        src: files/content.txt
+        dest: c:\mypath\myfile2.txt
+
+    - name: copy within a server
+      win_copy:
+        src: c:\mypath\myfile.txt
+        dest: c:\mypath\myfile-copy.txt
+        remote_src: true
+
+    - name: query info
+      win_stat:
+        path: c:\mypath\myfile.txt
+      register: statresult
+
+    - name: change a text file
+      win_lineinfile:
+        path: c:\windows\system32\drivers\etc\hosts
+        line: 1.2.3.4    timserver.example.com
+      
+    - name: set ownership
+      win_owner:
+        path: c:\mypath\myfile-copy.txt
+        user: '{{ statresult.stat.owner }}'
+
+    - name: add/change acl
+      win_acl:
+        path: c:\mypath\myfile2.txt
+        user: devops
+        rights: Modify
+        type: allow
+        state: present

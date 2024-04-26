@@ -1,0 +1,5 @@
+---
+- src: https://gitlab.example.com/student/ansible-7zip.git
+  scm: git
+  version: 5bb3f380b2372efd5cc421f3bc4e919964f391c1
+  name: my7zip

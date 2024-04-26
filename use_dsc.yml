@@ -1,0 +1,30 @@
+---
+- name: try to encrypt T drive
+  hosts: win1.example.com
+  gather_facts: no
+  tasks:
+    - name: install psmodule
+      win_psmodule:
+        name: xBitlocker
+        state: present
+    
+    - name: feature
+      win_feature:
+        name:
+          - Bitlocker
+          - RSAT-Feature-Tools-Bitlocker
+          - RSAT-Feature-Tools-Bitlocker-RemoteAdminTool
+      register: blresult
+
+    - name: reboot if needed
+      win_reboot:
+      when: blresult.reboot_required
+
+    - name: invoke xBLBitLocker
+      win_dsc:
+        resource_name: xBLBitlocker
+        MountPoint: 'T:\'
+        PrimaryProtector: RecoveryPasswordProtector
+        RecoveryPasswordProtector: true
+        AllowImmediateReboot: true
+        UsedSpaceOnly: true

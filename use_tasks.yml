@@ -1,0 +1,18 @@
+---
+- name: use tasks
+  hosts:
+    - win1.example.com
+    - win2.example.com
+  gather_facts: no
+  vars:
+    secret_webserver: Web-Server
+    files_to_import:
+      win1.example.com: tasks/web_tasks.yml
+      win2.example.com: tasks/no_tasks.yml
+  tasks:
+    - name: include web_tasks
+      include_tasks: "{{ files_to_import[inventory_hostname] }}"
+      vars:
+        service_name: W3Svc
+        web_content: content
+        web_dest: c:\inetpub\wwwroot\index.html

@@ -1,0 +1,14 @@
+---
+- name: run files.yml
+  import_playbook: files.yml
+
+- name: play in between the two
+  hosts: win1.example.com
+  tasks:
+    - name: check connectivity
+      win_ping:
+
+- name: run registry.yml
+  import_playbook: registry.yml
+
+

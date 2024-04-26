@@ -1,0 +1,41 @@
+---
+- name: fail demo
+  hosts: Windows
+  gather_facts: false
+  tasks:
+    - name: fail on Monday
+      win_shell: date
+      register: dateresult
+      failed_when: '"Mon" in dateresult.stdout'
+      changed_when: false
+
+    - name: fail on hosts called win2
+      fail:
+        msg: win2 is just too slow for some reason
+      when: '"win2" in inventory_hostname'
+
+    - name: tasks to download a file
+      when: false
+      block:
+        - name: task to download 7-zip
+          win_get_url:
+            url: http://fake.server.example.com/7-zip.msi
+            dest: c:\7-zip.msi
+
+        - name: another task to check the host is still running
+          win_ping:
+
+      rescue:
+        - name: try alternate server
+          win_get_url:
+            url: https://www.7-zip.org/a/7z1900-x64.msi
+            dest: c:\7-zip.msi
+
+      always:
+        - name: always runs this
+          debug:
+            msg: We always run this
+
+
+
+        

@@ -1,0 +1,19 @@
+---
+- name: facts demo
+  hosts: Windows
+  gather_facts: false
+  tasks:
+    - name: gather disk facts
+      win_disk_facts:
+
+    - name: copy out a file with facts in it
+      win_copy:
+        content: |
+          OS is {{ ansible_facts['os_name'] }}
+          Memory is {{ ansible_facts.memtotal_mb }}
+          FQDN from win2 {{ hostvars['win2.example.com'].ansible_facts.fqdn }}
+          Arch is {{ ansible_architecture }}
+          Week Number is {{ ansible_facts['date_time']['weeknumber'] }}
+          First disk partition type is {{ ansible_facts.disks[0].partition_style }}
+        dest: c:\facts.txt
+

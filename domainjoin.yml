@@ -1,0 +1,15 @@
+---
+- name: join to a domain
+  hosts: win2.example.com
+  tasks:
+    - name: join
+      win_domain_membership:
+        dns_domain_name: example.com
+        domain_admin_user: Administrator@example.com
+        domain_admin_password: RedHat123@!
+        state: domain
+      register: joinresult
+
+    - name: reboot if needed
+      win_reboot:
+      when: joinresult.reboot_required

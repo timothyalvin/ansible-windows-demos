@@ -1,0 +1,37 @@
+---
+- name: install demo
+  hosts: win1.example.com
+  gather_facts: false
+  tasks:
+    - name: download the MSI
+      win_get_url:
+        url: https://www.7-zip.org/a/7z1900-x64.msi
+        dest: c:\windows\temp\
+
+    - name: install that
+      win_package:
+        path: c:\windows\temp\7z1900-x64.msi
+        state: present
+
+    - name: install jre
+      win_chocolatey:
+        name: jre8
+        state: present
+
+    - name: win feature 
+      win_feature:
+        name: Web-Server
+        state: present
+      register: installresult
+
+    - name: reboot if needed
+      win_reboot:
+      when: installresult.reboot_required
+
+    - name: install an update
+      win_updates:
+        state: installed
+        whitelist: 890830
+        reboot: yes
+
+    

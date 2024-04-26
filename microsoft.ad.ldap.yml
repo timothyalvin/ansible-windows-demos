@@ -1,0 +1,13 @@
+# Set in the file ending with microsoft.ad.ldap.yml or microsoft.ad.ldap.yaml
+plugin: microsoft.ad.ldap
+
+
+####################################################################
+#                        Connection Options                        #
+#                                                                  #
+# These options control how the plugin connects to the LDAP server #
+####################################################################
+
+# Connects to ldap://dc01.domain.com:389
+server: dc01.domain.com
+port: 389

@@ -1,0 +1,31 @@
+- name: apply the values
+  win_regedit:
+    path: "{{ item.key }}"
+    name: "{{ item['value_name'] }}"
+    type: '{{ item.type }}'
+    data: '{{ item.data }}'
+  loop: "{{ registry_requirements }}"
+  when: ansible_facts.os_name in item.targets
+
+- name: apply values that might require reboot
+  win_regedit:
+    path: "{{ item.key }}"
+    name: "{{ item['value_name'] }}"
+    type: '{{ item.type }}'
+    data: '{{ item.data }}'
+  loop:
+    - key: HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management
+      value_name: FeatureSettingsOverride
+      type: dword
+      data: 0
+    - key: HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management
+      value_name: FeatureSettingsOverrideMask
+      type: dword
+      data: 0
+  notify: reboot the server
+
+- name: stop banned services
+  win_service:
+    name: "{{ item }}"
+    state: stopped
+  loop: "{{ banned_services }}"

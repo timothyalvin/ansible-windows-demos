@@ -1,0 +1,21 @@
+---
+- name: ensure IIS is installed
+  win_feature:
+    name: '{{ secret_webserver }}'
+    state: present
+
+- name: ensure {{ service_name }} is started
+  win_service:
+    name: '{{ service_name }}'
+    state: started
+    start_mode: auto
+  register: serviceresult
+
+- name: show value
+  debug:
+    var: serviceresult
+
+- name: deploy an index.html
+  win_copy:
+    content: '{{ web_content }}'
+    dest: '{{ web_dest }}'

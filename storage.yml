@@ -1,0 +1,19 @@
+---
+- name: storage
+  hosts: win1.example.com
+  tasks:
+    - name: initialize disk
+      community.windows.win_initialize_disk:
+        disk_number: 1
+  
+    - name: partition that
+      community.windows.win_partition:
+        disk_number: 1
+        drive_letter: T
+        partition_size: -1
+        state: present
+
+    - name: format that
+      community.windows.win_format:
+        drive_letter: T
+        file_system: NTFS

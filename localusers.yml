@@ -1,0 +1,68 @@
+---
+- name: local user demo
+  hosts: Windows
+  gather_facts: no
+  tasks:
+    - name: create a user account
+      win_user:
+        name: alice
+        password: RedHat123@!
+        state: present
+        fullname: Alice Alison
+        groups:
+          - Users
+          - Print Operators
+          - Cryptographic Operators
+        groups_action: add
+
+    - name: create a local group
+      win_group:
+        name: Demonstration Watchers
+        state: present
+
+    - name: put members in that
+      win_group_membership:
+        name: Demonstration Watchers
+        members:
+          - alice
+          - devops
+          - Administrator
+        state: pure
+
+    - name: create or find profile
+      win_user_profile:
+        state: present
+        username: alice
+      register: profileresult
+
+    - name: copy a file to desktop
+      win_copy:
+        content: Hello From Ansible
+        dest: '{{ profileresult.path }}\Desktop\hello.txt'
+
+    - name: query the Administrators
+      win_group_membership:
+        name: Administrators
+        members: []
+      register: groupresult
+
+    - name: add those to Demonstration Watchers
+      win_group_membership:
+        name: Demonstration Watchers
+        members: '{{ groupresult.members }}'
+
+    - name: Find all local users
+      win_shell: Get-LocalUser | Select-Object -ExpandProperty Name
+      register: userresult
+
+    - name: create a local group
+      win_group:
+        name: Demonstration Victims
+        state: present
+
+    - name: add them to a new group
+      win_group_membership:
+        name: Demonstration Victims
+        members: '{{ userresult.stdout_lines }}'
+        state: present
+  

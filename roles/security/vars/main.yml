@@ -1,0 +1,21 @@
+registry_requirements:
+  - key: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint
+    value_name: NoWarningNoElevationOnInstall
+    type: dword
+    data: 0
+    targets:
+      - Microsoft Windows Server 2019 Datacenter
+      - Microsoft Windows Server 2023 Datacenter
+  - key: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint
+    value_name: UpdatePromptSettings
+    type: dword
+    data: 1
+    targets:
+      - Microsoft Windows For Workgroups 3.11
+      - Microsoft Windows Server 2023 Datacenter        
+  - key: HKLM:\SOFTWARE\TimSoft\Demo
+    value_name: fdsafasd
+    type: string
+    data: stringdata
+    targets:
+      - Microsoft Windows Server 2023 Datacenter

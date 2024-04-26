@@ -1,0 +1,9 @@
+---
+- name: template demo
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: deploy configuration file
+      win_template:
+        src: templates/ConfigurationFile.ini.j2
+        dest: c:\windows\temp\ConfigurationFile.ini

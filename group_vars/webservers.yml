@@ -1,0 +1,8 @@
+---
+web_content: value from webservers group_vars
+banned_services:
+  - Spooler
+  - BITS
+  - MapsBroker
+  - MayNotExist
+  - SomeVirusTool

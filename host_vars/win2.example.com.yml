@@ -1,0 +1,6 @@
+---
+web_content: value for win2 from host_vars
+sql_features:
+  - SQL
+  - IS
+  - whatever

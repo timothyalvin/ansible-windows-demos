@@ -1,0 +1,8 @@
+---
+web_content: value for database group from group_vars subdir
+banned_services:
+  - Spooler
+  - BITS
+  - MapsBroker
+  - W3Svc
+sql_action: Install

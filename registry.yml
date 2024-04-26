@@ -1,0 +1,76 @@
+---
+- name: registry demo
+  hosts: Windows
+  force_handlers: true
+  vars:
+    registry_requirements:
+      - key: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint
+        value_name: NoWarningNoElevationOnInstall
+        type: dword
+        data: 0
+        targets:
+          - Microsoft Windows Server 2019 Datacenter
+          - Microsoft Windows Server 2023 Datacenter
+      - key: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint
+        value_name: UpdatePromptSettings
+        type: dword
+        data: 1
+        targets:
+          - Microsoft Windows For Workgroups 3.11
+          - Microsoft Windows Server 2023 Datacenter        
+      - key: HKLM:\SOFTWARE\TimSoft\Demo
+        value_name: fdsafasd
+        type: string
+        data: stringdata
+        targets:
+          - Microsoft Windows Server 2023 Datacenter
+
+  tasks:
+    - name: apply the values
+      win_regedit:
+        path: "{{ item.key }}"
+        name: "{{ item['value_name'] }}"
+        type: '{{ item.type }}'
+        data: '{{ item.data }}'
+      loop: "{{ registry_requirements }}"
+      when: ansible_facts.os_name in item.targets
+
+    - name: apply values that might require reboot
+      win_regedit:
+        path: "{{ item.key }}"
+        name: "{{ item['value_name'] }}"
+        type: '{{ item.type }}'
+        data: '{{ item.data }}'
+      loop:
+        - key: HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management
+          value_name: FeatureSettingsOverride
+          type: dword
+          data: 0
+        - key: HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management
+          value_name: FeatureSettingsOverrideMask
+          type: dword
+          data: 0
+      notify: reboot the server
+        
+
+
+    - name: query the registry
+      win_reg_stat:
+        path: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint
+        name: UpdatePromptSettings
+      register: queryresult
+      notify: reboot the server
+
+    - name: run a command
+      win_shell: date
+      register: dateresult
+
+    - name: print a message
+      debug:
+        msg: Happy Friday
+      when: '"Friday" in dateresult.stdout'
+
+  handlers:
+    - name: reboot the server
+      win_reboot:
+        

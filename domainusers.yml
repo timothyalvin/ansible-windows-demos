@@ -1,0 +1,31 @@
+---
+- name: domain user demo
+  hosts: windc.example.com
+  gather_facts: no
+  tasks:
+    - name: create a user account
+      win_domain_user:
+        name: alice
+        password: RedHat123@!
+        state: present
+        firstname: Alice
+        surname: Alison
+        groups:
+          - Domain Users
+        groups_action: add
+        attributes:
+          telephoneNumber: 123-4567
+
+    - name: create a local group
+      win_domain_group:
+        name: Demonstration Watchers
+        state: present
+        scope: global
+
+    - name: put members in that
+      win_domain_group_membership:
+        name: Demonstration Watchers
+        members:
+          - alice
+          - Administrator
+        state: present

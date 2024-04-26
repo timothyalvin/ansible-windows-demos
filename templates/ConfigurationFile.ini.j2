@@ -1,0 +1,12 @@
+; Microsoft SQL Server Configuration file
+[OPTIONS]
+; Specifies a Setup work flow, like INSTALL, UNINSTALL, or UPGRADE.
+; This is a required parameter.
+ACTION="{{ sql_action | default("Remove") }}"
+; Specifies features to install, uninstall, or upgrade.
+; The list of top-level features include SQL, AS, and IS.
+; The SQL feature will install the database engine, replication, and full-text.
+FEATURES={% for feature in sql_features %}{{ feature }} {% endfor %}
+{% if ansible_facts.architecture=="arm" %}
+EXTRA_FEATURES=sometimes is here
+{% endif %}
