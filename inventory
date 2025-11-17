@@ -1,0 +1,13 @@
+[Windows]
+win1.example.com
+win2.example.com
+
+[Dallas]
+win1.example.com
+
+[SanDiego]
+win2.example.com
+
+[USA:children]
+Dallas
+SanDiego
