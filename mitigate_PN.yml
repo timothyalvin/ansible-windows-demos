@@ -10,7 +10,7 @@
 
     - name: install update
       ansible.windows.win_updates:
-        whitelist: 5012647
+        accept_list: 5012647
         state: installed
 
     - name: setting a registry key
