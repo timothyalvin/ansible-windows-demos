@@ -7,7 +7,7 @@
         path: c:\mypath\is\this
         state: directory
 
-    - name: copy something there
+    - name: copy something else there
       win_copy:
         src: README.md
         dest: c:\mypath\myfile.txt

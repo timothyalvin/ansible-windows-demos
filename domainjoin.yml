@@ -2,7 +2,7 @@
 - name: join to a domain
   hosts: win2.example.com
   tasks:
-    - name: join
+    - name: join domain
       win_domain_membership:
         dns_domain_name: example.com
         domain_admin_user: Administrator@example.com

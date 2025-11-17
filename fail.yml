@@ -11,7 +11,7 @@
 
     - name: fail on hosts called win2
       fail:
-        msg: win2 is just too slow for some reason
+        msg: win2 is just too goshdarn slow for some reason
       when: '"win2" in inventory_hostname'
 
     - name: tasks to download a file
