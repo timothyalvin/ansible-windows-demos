@@ -24,8 +24,6 @@
 
 - name: another play to target win1
   hosts: win1.example.com
-  become: true
-  become_method: runas
   tasks:
     - name: different target 
       ansible.windows.win_ping:
