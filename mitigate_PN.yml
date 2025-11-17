@@ -42,7 +42,7 @@
         Get-LocalUser
         Get-WmiObject -Class Win32_Product
       args:
-        chdir: c:\temp
+        chdir: c:\windows\temp
 
 
 
