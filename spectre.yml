@@ -1,0 +1,33 @@
+---
+- name: mitigate
+  hosts: Windows
+  vars:
+    mmValues:
+      - value: FeatureSettingsOverride
+        data: 0
+      - value: FeatureSettingsOverrideMask
+        data: 3
+  tasks:
+    - name: set the first value
+      ansible.windows.win_regedit:
+        path: >-
+          HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management
+        value: "{{ item['value'] }}"
+        type: dword
+        data: "{{ item['data'] }}"
+      loop: "{{ mmValues }}"
+
+    - name: merge a registry file
+      community.windows.win_regmerge:
+        path: c:\regitems.reg
+
+    - name: query the registry
+      ansible.windows.win_reg_stat:
+        path: >-
+            HKLM:\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management
+      register: entire_key
+
+    - name: show that
+      ansible.builtin.debug:
+        var: entire_key
+  
