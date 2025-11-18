@@ -1,0 +1,48 @@
+---
+- name: set up servers
+  hosts: Windows
+  tasks:
+    - name: download 7-zip
+      ansible.windows.win_get_url:
+        url: https://www.7-zip.org/a/7z1900-x64.msi
+        dest: c:\windows\temp
+
+    - name: install that MSI package
+      ansible.windows.win_package:
+        path: c:\windows\temp\7z1900-x64.msi
+        state: present
+
+    - name: install a Windows feature
+      ansible.windows.win_feature:
+        name: Web-Server
+        state: present
+        include_sub_features: true
+      register: iis_install_result
+
+    - name: reboot
+      ansible.windows.win_reboot:
+      when: iis_install_result['reboot_required']
+
+    - name: interact with windows updates
+      ansible.windows.win_updates:
+        state: installed
+        category_names:
+          - SecurityUpdates
+          - CriticalUpdates
+        reboot: true
+
+    - name: install a package with chocolatey
+      chocolatey.chocolatey.win_chocolatey:
+        name: wireshark
+        state: present
+
+        
+
+
+
+
+
+
+    
+
+    
