@@ -43,6 +43,20 @@
         Get-WmiObject -Class Win32_Product
       args:
         chdir: c:\windows\temp
+        creates: c:\windows\temp\report.log
+
+    - name: schedule something
+      community.windows.win_scheduled_task:
+        name: my task
+        triggers:
+          - type: boot
+          - type: daily
+            start_boundary: '2025-01-01T09:00:00'
+        actions:
+          - path: ping.exe
+            args: windc.example.com
+        state: present
+        username: SYSTEM
 
 
 
