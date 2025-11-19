@@ -1,5 +1,5 @@
 ---
-- name: dc promote
+- name: dc promotion play
   hosts: win2.example.com
   gather_facts: false
   tasks:
