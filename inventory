@@ -1,0 +1,13 @@
+[Windows]
+win1.example.com
+win2.example.com
+
+[Texas]
+win1.example.com
+
+[California]
+win2.example.com
+
+[USA:children]
+Texas
+California
