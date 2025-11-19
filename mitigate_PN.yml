@@ -1,0 +1,20 @@
+---
+- name: play to mitigate PrintNightmare
+  hosts: Windows
+  tasks:
+    - name: disable spooler service
+      ansible.windows.win_service:
+        name: Spooler
+        state: stopped
+        start_mode: disabled
+
+    - name: ensure update is installed
+      ansible.windows.win_updates:
+        accept_list: KB5012647
+        state: installed
+
+    - name: apply a registry vavlue
+      ansible.windows.win_regedit:
+        path: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint
+        state: absent
+        delete_key: true
