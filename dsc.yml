@@ -1,0 +1,15 @@
+---
+- name: run a DSC
+  hosts: Windows
+  tasks:
+    - name: install AuditPolicyDSC
+      community.windows.win_psmodule:
+        name: AuditPolicyDsc
+        state: present
+        accept_license: true
+
+    - name: set an audit policy option
+      ansible.windows.win_dsc:
+        resource_name: AuditPolicyOption
+        name: AuditBaseDirectories
+        value: Enabled
