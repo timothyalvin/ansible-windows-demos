@@ -1,0 +1,35 @@
+---
+- name: update and install
+  hosts: Windows
+  tasks:
+    - name: download 7-zip MSI package
+      ansible.windows.win_get_url:
+        url: https://www.7-zip.org/a/7z1900-x64.msi
+        dest: c:\windows\temp
+
+    - name: install that package
+      ansible.windows.win_package:
+        path: c:\windows\temp\7z1900-x64.msi
+        state: present
+
+    - name: install wireshark
+      chocolately.chocolately.win_chocolately:
+        name: wireshark
+        state: installed
+
+    - name: install IIS
+      ansible.windows.win_feature:
+        name: Web-Server
+        state: present
+      register: install_result
+    
+    - name: reboot?
+      ansible.windows.win_reboot:
+      when: install_result["reboot_required"]
+
+    - name: install updates from Microsoft or WSUS
+      ansible.windows.win_updates:
+        state: searched
+        reboot: true
+        accept_list:
+          - KB5042349
