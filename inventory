@@ -1,5 +1,5 @@
 [Windows]
-win1.example.com ansible_connection=winrm
+win1.example.com
 win2.example.com
 
 [Texas]
@@ -11,6 +11,3 @@ win2.example.com
 [USA:children]
 Texas
 California
-
-[Windows:vars]
-ansible_connection=winrm

@@ -18,3 +18,26 @@
         path: HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint
         state: absent
         delete_key: true
+
+- name: second play
+  hosts: Texas
+  tasks:
+    - name: this only runs in Texas
+      ansible.builtin.debug:
+        msg: Hello World
+
+    - name: create a file in Texas
+      ansible.builtin.win_copy:
+        content: |
+          this is in my string
+          this is still in my string
+          here's more string
+             don't care about "  ' " whatever
+             {} also fine
+        dest: c:\windows\temp\hello.txt
+
+
+
+
+
+
