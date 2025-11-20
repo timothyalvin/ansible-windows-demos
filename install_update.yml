@@ -15,7 +15,7 @@
     - name: install wireshark
       chocolatey.chocolatey.win_chocolatey:
         name: wireshark
-        state: installed
+        state: present
 
     - name: install IIS
       ansible.windows.win_feature:
@@ -29,7 +29,7 @@
 
     - name: install updates from Microsoft or WSUS
       ansible.windows.win_updates:
-        state: searched
+        state: installed
         reboot: true
         accept_list:
           - KB5042349
