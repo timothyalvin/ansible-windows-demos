@@ -13,7 +13,7 @@
         state: present
 
     - name: install wireshark
-      chocolately.chocolately.win_chocolately:
+      chocolatey.chocolatey.win_chocolatey:
         name: wireshark
         state: installed
 
